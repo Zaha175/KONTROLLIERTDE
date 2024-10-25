@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MPU Întrebări și Răspunsuri</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .questions {
+            flex: 1;
+            min-width: 300px;
+            height: 90vh;
+            overflow-y: auto;
+        }
+        .answers {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            height: 90vh;
+            overflow-y: auto;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 8px;
+            border: none;
+            background: #0066cc;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #0052a3;
+        }
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .questions, .answers {
+                height: auto;
+                max-height: 50vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="questions">
+            <input type="text" class="search-box" id="searchBox" placeholder="Suchen Sie die Fragen..." onkeyup="searchQuestions()">
+            <div id="questionsList">
+                <!-- Întrebările vor fi adăugate prin JavaScript -->
+            </div>
+        </div>
+        <div class="answers" id="answerBox">
+            <p>Wählen Sie eine Frage um die Antwort zu sehen...</p>
+        </div>
+    </div>
+
+    <script>
+        const qa_data = [
+            {
+                "question": "Warum kommen Sie zur MPU?",
+                "answer": "Ich habe Fehler gemacht, habe mich nicht an die Regeln gehalten, bin betrunken aufgefallen. Ich habe meine Einstellung zum Alkohol und zum Straßenverkehr verändert und das will ich Ihnen heute zeigen!"
+            },
+            {
+                "question": "Was sagen Sie zu den Zweifeln der Behörde an ihrer Fahreignung? Was sagen Sie dazu dass Sie heute hier sind? Sind Sie einverstanden dass Sie heute hier sind?",
+                "answer": "Ich kann das verstehen, dass finde ich gerecht, weil ich unter Alkoholeinfluss gefahren bin und ganz klar, eine Gefahr wahr!"
+            },
+            {
+                "question": "Beschreiben Sie den Tag Ihrer Trunkenheitsfahrt aus eigener Sicht mit Datum und Uhrzeiten.",
+                "answer": "Tathergang:\nAm 17.09.2021 Freitag 20:08 -> Blutentnahme um 20:36,  1.6 Promille\nTrinkbeginn: 17:00,  5 Bier + 4 doppelte\nIch habe nach der Arbeit Geburtstag von Kollegen gefeiert. Ich wusste am Freitag wird gefeiert!"
+            },
+            {
+                "question": "Trinkeinheit (1 Trinkeinheit ist eine Kurze,  0,5 Liter Bier hat 2,5 Trinkeinheiten, ein Glas Wein hat 2,5 Trinkeinheiten)\nWie viel und wie oft haben Sie konsumiert, getrunken?",
+                "answer": "Höchstmengen: alle drei Monate bei besonderen Anlässen, 7 Bier + 5 doppelte, ansonsten, unterschiedlich, nur am Wochenende.\n•	1-2 Bier wenn nichts Besonderes war, beim Essen!\n•	3-4, 5-6 oder 4-5 Bier immer Unterschiedlich, auch nicht jedes Wochenende!\n•	Vor  2 bis 3 Jahren da habe ich mein Konsum negativ verändert, davor habe habe ich 1-2 X monatlich etwas getrunken habe, meistens auf einer Feier oder im Restaurant. So ungefähr maximal 3-4 Bier und 2 dopellte. Nach und nach habe ich immer mehr getrunken, 3-4, 5-6 oder 4-5 Bier immer Unterschiedlich, und dann Höchstmengen: alle drei Monate bei besonderen Anlässen, 7 Bier + 5 doppelte!"
+            },
+            {
+                "question": "Wollten Sie so viel trinken? Wie wollten Sie nach Hause fahren?",
+                "answer": "Doch ich wusste wir treffen uns und ich trinke. Es war ausgemacht dass meine Frau mich abholt so gegen 22:00 Uhr - Meine Frau war an dem Abend bei der Nachbarin, Schmuck Abend. Ich bin aber gegen 20:00 Uhr schon Müde geworden und wollte nach Hause. Wollte dann auf meine Frau nicht warten und habe die falsche Entscheidung getroffen und bin mit dem Auto nach Hause gefahren."
+            },
+            {
+                "question": "Hatten Sie das Gefühl, noch sicher fahren zu können? Wie sie sich hinsichtlich der Alkoholwirkung gefühlt haben?",
+                "answer": "Ja, ich dachte ich kann noch fahren!\nAus heutiger Sicht war das natürlich nicht der Fall. "
+            },
+            {
+                "question": "Gab es solche Fahrten davor ohne erwischt zu werden?",
+                "answer": "Ja leider schon ein paarmal!\nMit 3 oder 4 Flaschen Bier oder auch solche Fahrten wie am Tattag gab’s, ja!\nDas war verantwortungslos von mir. Heute tut mir das leid!"
+            },
+            {
+                "question": "Was haben Sie sich am nächsten Tag gedacht?",
+                "answer": "Niedergeschlagen, geschämt, Kater gehabt. Ich habe bereut, dass ich andere und mich in Gefahr gebracht habe.\nNach dem Delikt im September war ich frustriert, habe noch 2 Monate weiter so getrunken, Und so langsam zwei Monate nach dem Delikt, da habe ich mein Konsum auf maximal zwei Bier reduziert, und habe mich entschieden für meine Zukunft für meine Familie und die Gesellschaft mein Alkoholkonsum zu reduzieren. \nHabe realisiert dass mein Alkoholkonsum zu hoch war! Gott sei Dank ist nichts passiert! Dann habe ich mir gesagt, sowas wird mir nie wieder passieren. \nIch habe mir geschworen Alkohol und Fahren für immer zu trennen. Es war zu viel was ich trinken konnte. Ich habe mich dann erinnert, wie schön das ist, wenn ich am Wochenende nur 1-2 Bier getrunken habe, da ist der Sonntag nicht kaputt gewesen. Und man wird nicht blöd und leichtsinnig von zwei Bier. Nur noch bei besonderen Anlässen. Das erste Bier habe ich zu Weihnachten getrunken. Dann Sylvester ein Bier, um 24:00 Uhr ein Sekt. Dann mein Geburtstag am 09.03.2022 nachgefeiert am 12.03.2022, ein Bier."
+            },
+            {
+                "question": "Wie war das Reduzieren für Sie?",
+                "answer": "Es war ungewöhnlich, komisch bei den ersten Feierlichkeiten (kein Schwitzen, kein Unruhiges schlafen)."
+            },
+            {
+                "question": "Warum haben Sie Ihren Konsum reduziert?",
+                "answer": "Weil ich von 1-2 Bier nicht leichtsinnig werde. Es gab ja Nachteile, der Sonntag war kaputt, es gab auch peinliche Situationen, und ich will in Zukunft niemanden im Verkehr verletzen."
+            },
+            {
+                "question": "Warum haben Sie das Trinken nicht schon früher reduziert?",
+                "answer": "Ich habe mich früher nicht um meine Gesundheit gekümmert und verharmloste den Alkohol.\nKeine Bewussten Pausen, keine Blackouts, keine Gedächtnislücken, keine Kontrollverluste!"
+            },
+            {
+                "question": "Gab es kritische Hinweise Anderer auf Ihren Alkoholkonsum und wie haben Sie darauf reagiert?",
+                "answer": "Nein, es gab keine Hinweise Anderer auf meinem Alkoholkonsum!"
+            },
+            {
+                "question": "Haben sie jemals die Kontrolle über ihre Trinkmenge verloren und bis zur Volltrunkenheit Alkohol  konsumiert?",
+                "answer": "Die Kontrolle über meine Trinkmenge  habe ich nicht verloren, denn Ich hatte keine Filmrisse, keine Gedächtnislücken, keine Kontrollverluste!"
+            },
+            {
+                "question": "Haben Sie früher schon einmal oder öfter über einen längeren Zeitraum bewusst und mit Absicht völlig auf den Genuss von Alkohol verzichtet? Haben Sie Pausen gemacht?",
+                "answer": "Nein, bewusst habe ich früher auf den Genuss von Alkohol nicht verzichtet, Abstinenzanläufe (Alkoholverzicht) gab es nicht."
+            },
+            {
+                "question": "Wann hatten Sie den ersten Kontakt mit Alkohol und wann haben Sie das erste Mal Alkohol zu sich genommen?",
+                "answer": "Erst so mit 15 oder 16 Jahren habe ich zum ersten Mal einen Schluck Bier probiert. Der hat mir damals aber nicht geschmeckt."
+            },
+            {
+                "question": "Warum haben Sie Alkohol getrunken? Ursachen?",
+                "answer": "Mein Vater war dominant, ich musste mich anpassen. Bruder war der Erste, ich war immer Zweiter. Nur ich war für die Mutterpflege zuständig. Drei Jahre Mutterpflege haben mich überlastet! Fühlte mich zu Hause auf der Ersatzbank. Beim Fußball fühlte ich mich geschätzt. Dachte, Jungs akzeptieren mich nicht, wenn ich nicht mittrinke. Trinken wurde ein Wettkampf. Mitgetrunken, ich fühlte mich zugehörig und lustig. Ich wollte allen gefallen, konnte schlecht Nein sagen. Überlastet, wurde ausgenutzt. Fühlte mich wertlos, ohne Anerkennung. Trank Alkohol, um Unzufriedenheit zu vergessen. 3 Jahre Mutterpflege war extrem belastend, kaum eigene Zeit. Bruder half kaum. Wollte Anerkennung in Familie, wurde mein Leben lang ignoriert."
+            },
+            {
+                "question": "Positive Aspekte des Alkoholkonsums?",
+                "answer": "Positiv beim Alkoholkonsum war dass Ich entspannter, redseliger war. Es war eine gute, angenehme Stimmung.\n(bei wenig und bei viel Alkohol)\nBei wenig Alkohol 1 bis 2 Flaschen Bier wurde ich redseliger und lustiger, gelassener. \nHatte am nächsten Tag keinerlei Beschwerden.\nBei viel Alkohol ca. 5 bis 6 Flaschen Bier 0,5 Liter mit 5 % Alkoholgehalt habe ich am nächsten Tag  mit Kopfschmerzen und Müdigkeit zu kämpfen."
+            },
+            {
+                "question": "Negative Folgen des Alkoholkonsums?",
+                "answer": "Negativ war dass ich Am nächsten Tag Kopfschmerzen hatte, ich war müde, unmotiviert, ein ganz anderer Mensch."
+            },
+            {
+                "question": "Alkohol Einschätzung!",
+                "answer": "Es war gefährlich, weil die Mengen von Jahr zur Jahr gestiegen sind (Toleranzsteigerung), das war zu viel was ich getrunken habe, ich habe früher mir keine Gedanken gemacht, ist es viel oder nicht? Aber nach dem Delikt sehe ich es anderes, das hätte ein Problem werden können. Scala bei 5."
+            },
+            {
+                "question": "Können Sie in Zukunft sich vorstellen ein zwei Bier zu trinken oder ein drittes Bier?",
+                "answer": "Das mache ich schon seit der Auffälligkeit so mit 1-2 Bier, weil es mir schmeckt!\nNur bei besonderen Anlässen, aber kein drittes Bier. Das gefällt mir gut so wie es ist!"
+            },
+            {
+                "question": "Wollen Sie nicht Abstinent leben?",
+                "answer": "Ich will nicht Abstinent leben bei besonderen Anlässen kann ich mir das weiterhin gut vorstellen, eine Flasche Bier zu trinken, denn es schmeckt mir es ist was Besonderes! Ich trinke Alkohol nicht mehr, um eine Wirkung zu erzielen, um mich besser zu fühlen. Ein Glas ist jetzt ein Teil des Essens, zum Genuss. "
+            },
+            {
+                "question": "Wie lange wollen Sie das kontrollierte Trinken beibehalten?",
+                "answer": "Das kontrollierte Trinken will ich für immer behalten, mir gefällt es ganz gut, ich habe die Nachteile (Kater am Sonntag, Kopfschmerzen) nicht mehr. Bin sehr zufrieden.\nIch hab festgestellt, dass zu viel trinken zu nichts Gutes führt."
+            },
+            {
+                "question": "Wie halten Sie es jetzt mit Ihrer Clique, mit der Sie normalerweise früher weggegangen sind?",
+                "answer": "Mittlerweile habe ich zu meiner Clique keinen Kontakt mehr.\nAuch habe ich festgestellt, dass es bei denen nur um den Alkohol ging.\nIn meinem jetzigen Freundeskreis würde starker Alkohol auch nicht akzeptiert werden."
+            },
+            {
+                "question": "Wo und mit wem haben Sie überwiegend getrunken?",
+                "answer": "Ich habe nur in der Gesellschaft mit Bekannten, Kollegen getrunken, nie alleine. \nNur bei bestimmten Anlässen, wie zum Beispiel Geburtstage, Anstoßen mit Kollegen, Silvester."
+            },
+            {
+                "question": "Was spricht dagegen das Sie nicht im Missbrauch (übermäßiger Konsum) waren?",
+                "answer": "Ich war nicht im Missbrauch weil ich nicht jeden Tag getrunken habe, ich habe meine Pflichten nicht vernachlässigt.\nIch habe mich nie krank zur Arbeit gemeldet, ich hatte nie Probleme bei der Arbeit aufgrund von Alkoholkonsum.\nIch habe die Kontrolle über meinen Alkoholkonsum nicht verloren, es gab in meinem Leben oft Gelegenheiten, bei denen   ich eine Flasche Bier getrunken habe, und das war's.\nIch habe nie alleine getrunken. Ich habe die Woche über nichts getrunken."
+            },
+            {
+                "question": "Wann haben Sie zuletzt Alkohol getrunken?",
+                "answer": "Am 12 März habe ich Geburtstag nachgefeiert, ein Bier."
+            },
+            {
+                "question": "Trinken Sie heute Alkohol? Wenn ja, was, wie viel und wie oft?",
+                "answer": "Ich trinke zu besonderen Anlässen ca. 6-8 Mal pro Jahr, wie zum Beispiel Geburtstage, Silvester. Ich trinke nicht wegen der Wirkung (berauscht sein) sondern nur wegen des Genusses (wie Kuchen essen).\n•	-  maximal zwei Bier von 0,33 Liter - über 3-4 Stunden. Das trinke ich in kleinen Schlucken und langsam. Davor und dazwischen trinke ich Wasser. Nicht alleine oder nicht zusammen mit Vieltrinkern."
+            },
+            {
+                "question": "Wie wollen sie in Zukunft das Trinken vom Fahren trennen?  Trennvermögen",
+                "answer": "Ich plane im Voraus, mit wem, wann und wo ich was trinke. Trinke nie ungeplant. Wie ich hin und zurück komme.\nNull-Promille-Grenze. Absicht Auto zu fahren … Kein Alkohol!. Absicht zu trinken … Kein Auto! Zum Beispiel: Öffentliche Verkehrsmittel, Meine Frau fährt mich hin oder ich fahre mit dem Taxi hin- und zurück.\nUnd habe immer mein Limit. -  maximal zwei Bier von 0,33 Liter - "
+            },
+            {
+                "question": "Ab welcher Menge nehmen Sie heute eine Alkoholwirkung wahr?",
+                "answer": "Bereits nach einem oder zwei Glas Bier ist eine spürbare Wirkung da. Meine Alkoholtoleranz hat in den letzten Monaten erheblich abgenommen, weil ich wesentlich weniger trinke. "
+            },
+            {
+                "question": "Was wissen Sie über Alkohol (Wirkung, Abbaugeschwindigkeit, Promillegrenzen, rechtliche Folgen)?",
+                "answer": "Eine sofortige, angenehme Wirkung von kurzer Dauer durch Ausschüttung von Endorphinen(Glückshormone). \nAbbauzeiten: Körper baut zwischen 0,1 bis 0,2 Promille in der Stunde ab. \nMann mit einem Gewicht von 50-80 Kilogramm baut in einer Stunde 0,15 Promille ab.\nFrau mit 50-60 kg baut in einer Stunde 0,1 Promille ab.\n0,5 Liter Bier hat ca. 0,3 Promille! Die Promillegrenze liegt bei 0,5 Promille.\nAb 0,5 Promille  Ordnungswidrigkeit, ab 1,1 Promille Straftat."
+            },
+            {
+                "question": "Warum trinken Sie heute kontrolliert Alkohol? Veränderungen, Heute und Zukunft",
+                "answer": "Habe mehr Lebenszeit heute, für meine Familie, Freunde und Hobbys. \nHabe mein altes Hobby wieder, habe mir ein neues Fahrrad gekauft, fahre viel mit meiner Frau Fahrrad. \nAußerdem möchte ich nie mehr jemanden gefährden. \nWo ich früher am Wochenende konsumiert habe, habe ich nun durch Hobbys und die Familie ersetzt."
+            },
+            {
+                "question": "Was wären riskante Situationen, in denen Ihr neues Trinkverhalten gefährdet sein könnte?",
+                "answer": "Risikosituation: Bestimmte (Lebenskrisen) \nKönnen gefährlich sein, wie zum Beispiel der Tod eines geliebten Menschen, eine schwere Krankheit, der Verlust des Arbeitsplatzes, Angst, Stimmungsschwankungen, der Verlust eines Partners oder eine schwere Erkrankung.\nWie würden Sie reagieren, wenn Sie Ihren Job verlieren würden? Das sollten wir nicht unterschätzen. Auch in einem solchen Fall würde ich nicht unkontrolliert Alkohol trinken. Ich würde meine Unterstützung in meiner Familie finden. Ich lebe weiter, schaue nach vorne. Ich liebe meinen momentanen Arbeitsplatz und hoffe, dass ich meinen Job nicht verliere!\nRisikosituation: (Ungeplantes Treffen)\nVor drei Monaten traf ich zufällig einen alten Freund. Wir unterhielten uns und gingen zusammen in ein Café. Der Freund wollte mich auf ein Bier einladen und ich lehnte automatisch ab... weil es kein geplanter Trinktag war. Erst später am Abend wurde mir klar, dass ich ohne nachzudenken abgelehnt hatte. Ich bin wirklich stolz auf diese Entwicklung und sehr glücklich!"
+            },
+            {
+                "question": "Wie hoch ist das Rückfallrisiko? Wie stellen Sie sicher, dass Ihr neues Verhalten langfristig stabil bleibt?",
+                "answer": "Ich bin gefestigt und von mir aus nie wieder. Natürlich kann aber keiner 100% geben. In Zukunft will ich mich an die Gesetze halten, weil ich niemanden mehr in Gefahr bringen möchte."
+            },
+            {
+                "question": "Warum ist das Risiko minimal?",
+                "answer": "Mein Limit gibt mir Sicherheit, dass heißt maximal zwei Flaschen Bier.\nKenne riskante Situationen, ich habe neue Freunde, ich weiß, was kontrolliertes Trinken bedeutet!\nWeiß was Suchtgedächtnis, Weiß was Toleranzsteigerung ist. \nIch weiß um meinen Wunsch nach Anerkennung und Zugehörigkeit! \nHabe gelernt NEIN zu sagen. Ich habe erkannt ich muss mich nicht verstellen um dazu zu gehören, ich kann zeigen, dass ich auch schwach bin, ich muss mich nicht mehr beweisen."
+            },
+            {
+                "question": "Was haben Sie bei der MPU Vorbereitung gelernt?",
+                "answer": "Wir haben über das Delikt gesprochen und meine Fehler gefunden. Habe nur an mich gedacht, habe das Gesetz nicht respektiert, war eine Gefahr für mich und für andere! \nWeiß das Alkohol Nerven und Zellen Gift ist, ist gesundheitsschädigend. Kann zur Abhängigkeit führen.\nWeiß was Rauschtrinken ist, wenn fünf oder mehr Gläser Alkohol bei einer Gelegenheit getrunken werden.\nWeiß was Toleranzsteigerung ist ( Alkohol wird immer mehr ).\nWeiß was Suchtgedächtnis ist (das Gehirn wird sich immer an die Höchstmengen erinnern).\nDas die Rückfallgefahr nicht ausgeschlossen werden kann.\nHabe Vor- und Nachteile besprochen. Bin für die Zukunft bereit."
+            },
+            {
+                "question": "Was sagen Sie zu dem das Sie eine MPU machen müssen?",
+                "answer": "Die MPU sei eine Lehre für mich. Ich hätte sonst in meinem Leben nichts verändert. Das hat mein Denken und meine Einstellung verändert, wäre mir das nicht passiert wer weiß was noch gekommen wäre. Dafür bin ich dankbar!"
+            },
+            {
+                "question": "Meinen Sie, Sie sollten den Führerschein zurückerhalten?",
+                "answer": "Nicht unbedingt, es wäre schön, aber wichtig für Mich IST die Tatsache, dass ich meine Denkweise und meine Einstellung zum Leben, zum Straßenverkehr, zu Gesetzen geändert habe, ich will die Gesetze respektieren."
+            },
+            {
+                "question": "Haben Sie zum Abschluss noch etwas hinzuzufügen?",
+                "answer": "Ich denke, dass der Entzug des Führerscheins nicht so schwerwiegend ist, weil es für mich eine Geisteslektion ist.\nWenn mir das nicht passiert wäre, hätte ich nichts im Leben verändert.\nDafür bin ich dankbar!"
+            },
+            {
+                "question": "Warum haben wir so viele Regeln und Gesetze?",
+                "answer": "Man braucht Regeln. Sie schützen uns. Ich habe verstanden, dass ich sicher und in Frieden lebe, wenn ich mich an die Regeln halte. \nOhne Regeln versinkt die Gesellschaft in Chaos, es gibt nur Chaos. "
+            },
+            {
+                "question": "Sind sie ein sicherer Fahrer?  NEIN, sonst wäre ich nicht bei der MPU, denn richtig gute Autofahrer müssen nicht zur MPU!",
+                "answer": "Wie schätzen Sie sich als Fahrer damals ein?   \nIch war ein egoistischer Fahrer, ich dachte nur an mich selbst und nicht an die Folgen! Es tut mir leid!"
+            },
+            {
+                "question": "Was ist für Sie ein guter, normaler Autofahrer?",
+                "answer": "Ein guter Bürger und Autofahrer, der das Gesetz respektiert, an andere denkt und keine Gefahr mehr ist!  "
+            },
+            {
+                "question": "Wo liegt die relative und wo die absolute Fahruntauglichkeitsgrenze? Bei 0,3 und 1,1 Promille!",
+                "answer": "Wie viele Personen müssen jährlich zur MPU? Bei 90.000 Personen im Jahr 2019 wegen Alkohol 40 %, Drogen mit 30 %, 20% Punkte, 10% Delikte. "
+            }
+        ];
+
+        function createButtons() {
+            const questionsList = document.getElementById('questionsList');
+            questionsList.innerHTML = '';
+            qa_data.forEach((item) => {
+                const button = document.createElement('button');
+                button.textContent = item.question;
+                button.onclick = () => showAnswer(item.question);
+                questionsList.appendChild(button);
+            });
+        }
+
+        function showAnswer(question) {
+            const answer = qa_data.find(item => item.question === question).answer;
+            document.getElementById('answerBox').innerHTML = `
+                <h3>${question}</h3>
+                <p>${answer}</p>
+            `;
+        }
+
+        function searchQuestions() {
+            const searchText = document.getElementById('searchBox').value.toLowerCase();
+            const questionsList = document.getElementById('questionsList');
+            questionsList.innerHTML = '';
+            
+            qa_data.forEach(item => {
+                if (item.question.toLowerCase().includes(searchText)) {
+                    const button = document.createElement('button');
+                    button.textContent = item.question;
+                    button.onclick = () => showAnswer(item.question);
+                    questionsList.appendChild(button);
+                }
+            });
+        }
+
+        // Construirea inițială a întrebărilor
+        createButtons();
+    </script>
+</body>
+</html>
